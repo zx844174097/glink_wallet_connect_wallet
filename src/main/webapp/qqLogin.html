@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<script type="text/javascript" charset="utf-8" src="http://connect.qq.com/qc_jssdk.js" data-appid="102010527"
+		data-redirecturi="http://other.yingxiong.com/dev_mainland/sdkcom/c1/pc/login/qqRedirect.ul"></script>
+	<script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script>
+	<script type="text/javascript">
+		var vConsole = new VConsole();
+		console.log("hello word!");
+	</script>
+</head>
+
+<body>
+	<span id="qqLoginBtn"></span>
+	<script type="text/javascript">
+		QC.Login({
+			btnId: "qqLoginBtn"	//插入按钮的节点id
+		});
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/aes.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/cipher-core.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/core.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/enc-base64.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/enc-hex.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/enc-utf8.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+	<script>
+		/**
+		 * 加密
+		 * @param encryptString 要加密的字符串
+		 * @param key 秘钥
+		 * @returns {string} 加密后的字符串
+		 */
+		function aesEncrypt(encryptString, key1) {
+			var key = CryptoJS.enc.Utf8.parse(key1);
+			var srcs = CryptoJS.enc.Utf8.parse(encryptString);
+			var encrypted = CryptoJS.AES.encrypt(srcs, key, {iv: CryptoJS.enc.Utf8.parse(key1.slice(0, 16)), mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});
+			return encrypted.ciphertext.toString(CryptoJS.enc.Base64);
+		}
+
+		/**
+		 * 解密
+		 * @param decryptString 要解密的字符串
+		 * @param key 秘钥
+		 * @returns {string} 解密后的字符串
+		 */
+		function aesDecrypt(decryptString, key1) {
+			var key = CryptoJS.enc.Utf8.parse(key1);
+			var decrypt = CryptoJS.AES.decrypt(decryptString, key, {iv: CryptoJS.enc.Utf8.parse(key1.slice(0, 16)), mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7});
+			return CryptoJS.enc.Utf8.stringify(decrypt).toString();
+		}
+
+		var key = "SVUGTG9VbihIS0CuZ3kBu2q57gE7jLfO"; // 至少四位数字
+		var pazzword = "1";
+		// aes 加密
+		pazzword = aesEncrypt(pazzword, key);
+		console.log('加密后：' + pazzword);
+		// 解密
+		console.log("解密后：" + aesDecrypt(pazzword, key));
+	</script>

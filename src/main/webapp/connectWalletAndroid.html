@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/enc-hex.min.js"></script>
+	<script src="https://static.runoob.com/assets/qrcode/qrcode.min.js"></script>
+    <title>Android</title>
+
+</head>
+
+<body>
+
+<div>
+    Android连接钱包。。。。
+    <button type="button" onclick="getWcUrl()" value="connectWallet">连接钱包
+    </button>
+	<div id="qrCode">
+		
+	</div>
+    <button type="button" onclick="getNonce()" value="connectWallet">通过签名来验证登录</button>
+    <div>
+        <textarea name="log" style=" width: 100%;    height: 600px;" id="log"></textarea>
+    </div>
+
+</div>
+
+<script type="text/javascript">
+        var walletAddress=null;
+        var qcode=null;
+        var topic=null;
+         var timee=null;
+        //得到钱包连接url并显示二维码
+        function getWcUrl(){
+             var request;
+               if(window.XMLHttpRequest){
+                   //code for IE7+, Firefox, Chrome, Opera, Safari
+                   request=new XMLHttpRequest();
+               }else{
+                   //code for IE5, IE6
+                   request=new ActiveXObject("Microsoft.XMLHTTP");
+               }
+   			request.open('post', "./walletConnectUrl.html?market=android",true);
+            request.setRequestHeader('content-type', 'application/json');
+   			request.onreadystatechange = () => {
+   				if (request.readyState == 4) {
+   					var str = request.responseText;
+   					if(qcode==null){
+                        qcode=new QRCode(document.getElementById("qrCode"), str);
+                    }else {
+                        qcode.makeCode(str);
+                    }
+   					topic=str.split("wc:")[1].split("@")[0];
+   					//推送连接消息：
+   					pushConnectMsg(getWcSessionRequest(),"pub");
+   					if(timee==null)
+                        timee= setTimeout("timer()",3000);
+   				}
+   			}
+   			request.send();
+        }
+
+        function timer(){
+            if(a)
+                pushConnectMsg();
+            timee=setTimeout("timer()",3000);
+        }
+
+        //{"id":1660288752954960,"jsonrpc":"2.0","method":"wc_sessionRequest","params":[{"peerId":"d3e27a4c-84e7-4b58-9e95-d930f8ea3456","peerMeta":{"description":"","url":"https://example.walletconnect.org","icons":["https://example.walletconnect.org/favicon.ico"],"name":"WalletConnect Example"},"chainId":null}]}
+        var uuid=UUID();
+        function getWcSessionRequest(){
+            var id=(new Date()).valueOf();
+                var sendMsg={
+                        "id":id,
+                        "jsonrpc":"2.0",
+                        "method":"wc_sessionRequest",
+                        "params":[
+                            {
+                            "peerId": uuid,
+                            "peerMeta":
+                                {"description":"","url":"http://zx844174097.oicp.net/web/connectWallet.html",
+                                    "icons":[
+                                        "https://example.walletconnect.org/favicon.ico"
+                                    ],
+                                    "name":"mugui wallet"
+                                },"chainId":null
+                             }
+                        ]
+                    };
+
+                 msgData[id]=sendMsg;
+                return sendMsg;
+        }
+        var a=true;
+        //推送连接消息
+        function pushConnectMsg(msgSend,type){
+            a=false;
+        	if(type==null){
+        		type="sub";
+        	}
+        	 var request;
+               if(window.XMLHttpRequest){
+                   //code for IE7+, Firefox, Chrome, Opera, Safari
+                   request=new XMLHttpRequest();
+               }else{
+                   //code for IE5, IE6
+                   request=new ActiveXObject("Microsoft.XMLHTTP");
+               }
+   			request.open('post', "./pushMsg.html",true);
+            request.setRequestHeader('content-type', 'application/json');
+   			request.onreadystatechange = () => {
+   				if (request.readyState == 4) {
+   				    a=true;
+   					var str = request.responseText;
+   					if(str=="close"){
+   					    return;
+   					}
+   					if(str==null||str.length==0){
+   					    return;
+   					}
+   					log("pushConnectMsg->"+str);
+   					if(str!=null&&str!=""){//处理接收到的消息
+   					    var data=JSON.parse(str);
+   					    for(var i=0;i<data.length;i++){
+   					        handMsg(JSON.parse(data[i]['payload']));
+   					    }
+   					}
+   				}
+   			}
+   			if(msgSend==null||msgSend==""){
+   			    msgSend={};
+   			}
+            var payload=JSON.stringify(msgSend);
+            var type=type;
+            var silent=true;
+            var message={
+                "payload": payload,
+                "type": type,
+                "silent": silent,
+                "topic": topic
+            }
+            request.send(JSON.stringify(message));
+        }
+         //处理消息
+        function handMsg(msg){
+            if(msg.error!=null){
+                //用户取消了操作
+                log(msg.error.message);
+                return;
+
+            }
+            var method=msgData[msg.id];
+            if(method==null)
+                return;
+            delete msgData[msg.id];
+            if(method.method=="wc_sessionRequest"){
+                //同意连接钱包
+                if(msg.result.approved){
+                     //钱包地址
+                     walletAddress=msg.result.accounts[0];
+                }
+            }else if(method.method=="personal_sign"){
+                sendLoginMsg(method.params,msg.result);
+            }
+
+
+        }
+
+        //得到登录随机数
+        function getNonce(){
+
+		    if(walletAddress==null)
+		    {
+		        log("请连接钱包");
+		        return;
+		    }
+		     var sendMsg={
+		        "address":walletAddress
+            }
+
+            var request;
+            if(window.XMLHttpRequest){
+                //code for IE7+, Firefox, Chrome, Opera, Safari
+                request=new XMLHttpRequest();
+            }else{
+                //code for IE5, IE6
+                request=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+			request.open('post', "./walletLoginNonce.html",true);
+            request.setRequestHeader('content-type', 'application/json');
+			request.onreadystatechange = () => {
+				if (request.readyState == 4) {
+					var str = request.responseText;
+					log("getNonce ->"+str);
+					var data=JSON.parse(str);
+					if(data.code==0){
+					    loginWallet(data.msg);
+					}
+				}
+			}
+			request.send(JSON.stringify(sendMsg));
+        }
+        var msgData=[];
+		function loginWallet(nonce) {
+		    if(walletAddress==null)
+		    {
+		        log("请连接钱包");
+		        return;
+		    }
+            console.log(walletAddress);
+            var pwd="mugui123";
+            //
+            var loginMsg = "这是一条登录消息,不发生实际交易。code:"+nonce;
+		    var param= [loginMsg,walletAddress];
+		    var id=(new Date()).valueOf();
+            var data= {
+                id: id,
+                jsonrpc: "2.0",
+                method: 'personal_sign',
+                params: param
+            }
+            log("登录中");
+            msgData[id]=data;
+            pushConnectMsg(data,"pub");
+		}
+        function sendLoginMsg(msg,sign){
+            var sendMsg={
+                "msg": msg,
+                "sign": sign
+            }
+
+            var request;
+            if(window.XMLHttpRequest){
+                //code for IE7+, Firefox, Chrome, Opera, Safari
+                request=new XMLHttpRequest();
+            }else{
+                //code for IE5, IE6
+                request=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+			request.open('post', "./walletLogin.html",true);
+            request.setRequestHeader('content-type', 'application/json');
+			request.onreadystatechange = () => {
+				if (request.readyState == 4) {
+					var str = request.responseText;
+					log("sendLoginMsg ->"+str);
+				}
+			}
+			request.send(JSON.stringify(sendMsg));
+
+        }
+		function isMainNet(){
+		    if( ethereum.networkVersion==1){
+		        return true;
+		    }
+		    log("非主网");
+		    return false;
+		}
+		function isConnectWallet() {
+			if( window.ethereum==null){
+			    log("无法连接钱包插件");
+			    return false;
+			}
+			return true;
+
+		}
+        function log( value) {
+            $("#log").append(value+"\n");
+			var textarea = document.getElementById('log');
+            textarea.scrollTop = textarea.scrollHeight;
+        }
+        function UUID() {
+            var s = [];
+            var hexDigits = "0123456789abcdef";
+            for (var i = 0; i < 36; i++) {
+                s[i] = hexDigits.substr(Math.floor(Math.random() * 0x10), 1);
+            }
+            s[14] = "4"; // bits 12-15 of the time_hi_and_version field to 0010
+            s[19] = hexDigits.substr((s[19] & 0x3) | 0x8, 1); // bits 6-7 of the clock_seq_hi_and_reserved to 01
+            s[8] = s[13] = s[18] = s[23] = "-";
+
+            var uuid = s.join("");
+            return uuid;
+        }
+
+
+
+</script>
+</body>

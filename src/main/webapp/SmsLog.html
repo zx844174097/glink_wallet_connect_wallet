@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;">
+
+<head>
+
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta charset="UTF-8">
+	<title>SMSLog</title>
+</head>
+
+<body style="height: 95%;">
+	<div style=" height: 100%;">
+		<textarea name="a" id="log" style="width: 100%;height: 100%;"
+			onpropertychange="this.scrollTop=this.scrollHeight" οnfοcus="this.scrollTop=this.scrollHeight"></textarea>
+
+	</div>
+	<script type="text/javascript">
+
+		function Low() {
+			var textarea = document.getElementById('log');
+			textarea.scrollTop = textarea.scrollHeight;
+		}
+
+		var index = -1;
+
+		function update() {
+
+			var request = new XMLHttpRequest();
+			request.open('get', "http://10.22.12.138:5678/SmsLogNew.html?line=" + index);
+			request.onreadystatechange = () => {
+
+				if (request.readyState == 4) {
+					var val = document.getElementById("log");
+					var str = request.responseText;
+					var data = JSON.parse(str);
+					if (data['data'] && data['data'] != "") {
+						val.append(data['data']);
+						Low();
+					}
+					this.index = data['top'];
+					setTimeout("update()", 1000);
+				}
+			}
+			request.send();
+		}
+		var timer = setTimeout("update()", 1);
+
+	</script>
+</body>

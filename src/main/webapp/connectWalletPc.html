@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<script src="http://libs.baidu.com/jquery/1.9.0/jquery.js"></script>
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.js"></script>
+
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/enc-hex.min.js"></script>
+
+<title>PC</title>
+
+</head>
+
+<body>
+
+	<div>
+		PC连接钱包。。。。
+		<button type="button" onclick="connectWallet()" value="connectWallet">连接钱包
+		</button>
+
+		<button type="button" onclick="getNonce()" value="connectWallet">通过签名来验证登录</button>
+		<div>
+			<textarea name="log" style="width: 100%; height: 600px;" id="log"></textarea>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+        var walletAddress=null;
+		function connectWallet() {
+            //如果用户安装了MetaMask，你可以要求他们授权应用登录并获取其账号
+			if(!isConnectWallet())return;
+            ethereum.enable()
+                .catch(function(reason) {
+                    //如果用户拒绝了连接钱包的请求
+                    log(reason.code+":"+reason.message);
+                    walletAddress=null;
+                }).then(function(accounts) {
+                    if(accounts==null)return;
+                    if(!isMainNet()){
+                        log("非主网");
+                        return;
+                    }
+                    //同意连接
+                    log(JSON.stringify(accounts));
+                     //钱包地址
+                     walletAddress=accounts[0];
+
+                     init();
+
+                });
+
+		}
+        function init(){
+            ethereum.on("accountsChanged",function(accounts){
+                //账号发生变化
+                console.log(accounts)
+                if(!isMainNet()){
+                    log("退出登录");
+                    walletAddress=null;
+                    return;
+                }
+                if(accounts[0]==walletAddress) return;
+                //账号发生变化需要重新登录
+                log("账号发生变化需要重新登录");
+                walletAddress=accounts[0];
+                getNonce();
+            });
+
+            ethereum.on("networkChanged",function(value){
+                //网络发生变化
+                console.log(value);
+                if(!isMainNet())
+                {//非主网退出
+                    log("非主网退出");
+                    walletAddress=null;
+                    return;
+                }
+                //需要重新登录
+                log("需要重新登录");
+                getNonce();
+            });
+        }
+        //得到登录随机数
+        function getNonce(){
+
+		    if(walletAddress==null)
+		    {
+		        log("请连接钱包");
+		        return;
+		    }
+		     var sendMsg={
+		        "address":walletAddress
+            }
+
+            var request;
+            if(window.XMLHttpRequest){
+                //code for IE7+, Firefox, Chrome, Opera, Safari
+                request=new XMLHttpRequest();
+            }else{
+                //code for IE5, IE6
+                request=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+			request.open('post', "./walletLoginNonce.html",true);
+            request.setRequestHeader('content-type', 'application/json');
+			request.onreadystatechange = () => {
+				if (request.readyState == 4) {
+					var str = request.responseText;
+					log("sendLoginMsg ->"+str);
+					var data=JSON.parse(str);
+					if(data.code==0){
+					    loginWallet(data.msg);
+					}
+				}
+			}
+			request.send(JSON.stringify(sendMsg));
+
+
+        }
+
+		function loginWallet(nonce) {
+		    if(walletAddress==null)
+		    {
+		        log("请连接钱包");
+		        return;
+		    }
+            console.log(walletAddress);
+            var pwd="mugui123";
+            // 中文转换为Unicode编码
+            var loginMsg = "这是一条登录消息,不发生实际交易。code:"+nonce;
+		    var param= [loginMsg,walletAddress,pwd];
+
+            log("登录中");
+            ethereum.sendAsync({
+                method: 'personal_sign',
+                params: param,
+                from: walletAddress
+            },function(err, result) {
+                if(err!=null){
+                    log(err.code+":"+err.message);
+                    return;
+                }
+                log("签名后信息"+result.result);
+                //请求服务器进行用户签名校验
+                sendLoginMsg(param,result.result);
+            });
+		}
+        function sendLoginMsg(msg,sign){
+            var sendMsg={
+                "msg": msg,
+                "sign": sign
+            }
+
+            var request;
+            if(window.XMLHttpRequest){
+                //code for IE7+, Firefox, Chrome, Opera, Safari
+                request=new XMLHttpRequest();
+            }else{
+                //code for IE5, IE6
+                request=new ActiveXObject("Microsoft.XMLHTTP");
+            }
+			request.open('post', "./walletLogin.html",true);
+            request.setRequestHeader('content-type', 'application/json');
+			request.onreadystatechange = () => {
+				if (request.readyState == 4) {
+					var str = request.responseText;
+					log("sendLoginMsg ->"+str);
+				}
+			}
+			request.send(JSON.stringify(sendMsg));
+
+        }
+		function isMainNet(){
+		    if( ethereum.networkVersion==1){
+		        return true;
+		    }
+		    log("非主网");
+		    return false;
+		}
+		function isConnectWallet() {
+			if( window.ethereum==null){
+			    log("无法连接钱包插件");
+			    return false;
+			}
+			return true;
+
+		}
+        function log( value) {
+            $("#log").append(value+"\n");
+			var textarea = document.getElementById('log');
+            textarea.scrollTop = textarea.scrollHeight;
+        }
+
+
+</script>
+</body>
