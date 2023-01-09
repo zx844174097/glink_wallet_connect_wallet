@@ -23,6 +23,7 @@ import javax.swing.JPanel;
 
 import com.mugui.Dui.DButton;
 import com.mugui.base.base.Autowired;
+import com.mugui.base.base.Component;
 
 import cn.hutool.core.util.NumberUtil;
 import cn.net.mugui.net.pc.manager.FunctionUI;
@@ -59,7 +60,7 @@ public class qq登录和支付 extends FunctionUI {
 		DButton 日志 = new DButton("日志", (Color) null);
 		日志.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				muguiBrowser.openUrl("http://127.0.0.1:5678/SmsLog.html");
+				muguiBrowser.openUrl("http://10.22.12.138:5678/web/SmsLog.html");
 			}
 		});
 		日志.setText("日志");
@@ -94,6 +95,8 @@ public class qq登录和支付 extends FunctionUI {
 		if (!thread.isAlive())
 			thread.start();
 
+		if (!thread2.isAlive())
+			thread2.start();
 	}
 
 	int top = 0;
@@ -104,6 +107,56 @@ public class qq登录和支付 extends FunctionUI {
 				try {
 					RandomAccessFile file = new RandomAccessFile(
 							new File("C:\\Users\\root\\.SmartTomcat\\mainland-srv-com\\sdkcom\\logs\\iossrv.log"), "r");
+					String str;
+					int index = 0;
+					boolean bool = true;
+					StringBuffer buffer = new StringBuffer();
+
+					while (true) {
+						if ((str = file.readLine()) != null) {
+							if (bool) {
+								bool = false;
+							}
+							index++;
+							if (top != 0) {
+								byte[] bytes = str.getBytes(Charset.forName("ISO-8859-1"));
+								buffer.append(new String(bytes, "UTF-8") + "\n");
+							}
+						} else {
+							if (!bool) {
+								newsLine.put(index, buffer.toString());
+								int size = newsLine.size();
+								if (size > 500) {
+									Iterator<Entry<Integer, String>> iterator = newsLine.entrySet().iterator();
+									while (iterator.hasNext() && size > 500) {
+										iterator.next();
+										iterator.remove();
+										size--;
+									}
+								}
+								buffer = new StringBuffer();
+							}
+							bool = true;
+							top = index;
+							Thread.sleep(500);
+						}
+
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		};
+	};
+
+	Thread thread2 = new Thread() {
+		public void run() {
+			while (true) {
+				try {
+					RandomAccessFile file = new RandomAccessFile(
+							new File("C:\\Users\\root\\.SmartTomcat\\mainland-srv-com\\sdkcom\\logs\\debug.log"), "r");
 					String str;
 					int index = 0;
 					boolean bool = true;

@@ -52,7 +52,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @SuppressWarnings("serial")
-@Component
+//@Component
 public class MetaMaskCsPanel extends FunctionUI {
 	private JPanel panel;
 	private DButton btnAndroid;
@@ -251,7 +251,6 @@ public class MetaMaskCsPanel extends FunctionUI {
 
 			System.out.println("接收到walletLoginNonce:" + request.getRequestURI());
 
-
 			ServletInputStream inputStream;
 			try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();) {
 				inputStream = request.getInputStream();
@@ -444,6 +443,7 @@ public class MetaMaskCsPanel extends FunctionUI {
 	{
 		sessionCache.schedulePrune(5 * 60 * 1000);
 	}
+
 	/**
 	 * 处理受到的推送消息
 	 * 
@@ -472,21 +472,21 @@ public class MetaMaskCsPanel extends FunctionUI {
 		collection.add(msgBean);
 		sessionCache.put(string, session);
 	}
-	
+
 	TimedCache<String, Peer> peermap = new TimedCache<>(5 * 60 * 1000);
 	{
 		peermap.schedulePrune(5 * 60 * 1000);
 	}
-	
+
 	public static final class Peer {
 		/**
 		 * [0]为应用端 ，[1]为钱包端
 		 */
-		String[] peer=new String[2];
+		String[] peer = new String[2];
 	}
-	
+
 	/**
-	 * {"payload":"","silent":true,"topic":"803838dc-5b47-4384-bc7b-f82af2f38e7e","type":"sub"}
+	 * {"payload":"","silent":true,"topic":"803838dc-5b47-4384-bc7b-f82af2f38e7getWalletConnectBeane","type":"sub"}
 	 * 
 	 * @param session
 	 * 

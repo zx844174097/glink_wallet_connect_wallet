@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>webmall登录</title>
+	<script src="https://cdn.bootcdn.net/ajax/libs/qrcodejs/1.0.0/qrcode.js"></script>
+</head>
+<body>
+使用微信扫一扫<br/>
+<span id="url">https://www.996315.com/api/scan/?redirect_uri=http://zx844174097.oicp.net/web/webmallLogin.html</span> <br/>
+<div id="qrcode"></div><br/><br/><br/><br/><br/>
+<div id="qrcode2"></div>
+<button id="btn">确认登录</button>
+<script type="text/javascript">
+	var qrcode = new QRCode(document.getElementById("qrcode"), {
+			text: "http://zx844174097.oicp.net/web/webmallLogin.html",
+			width: 128,
+			height: 128,
+			colorDark : "#000000",
+			colorLight : "#ffffff",
+			correctLevel : QRCode.CorrectLevel.H
+		});
+	var qrcode2 = new QRCode(document.getElementById("qrcode2"), {
+			text: "https://www.996315.com/api/scan/?redirect_uri=http://zx844174097.oicp.net/web/webmallLogin.html",
+			width: 128,
+			height: 128,
+			colorDark : "#000000",
+			colorLight : "#ffffff",
+			correctLevel : QRCode.CorrectLevel.H
+		});
+</script>
+</body>
+</html>

@@ -1,42 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 	<meta charset="UTF-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta charset="UTF-8">
 	<title>Document</title>
-	<script type="text/javascript" charset="utf-8"
-		src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
-	<script src="https://cdn.bootcss.com/vConsole/3.2.0/vconsole.min.js"></script>
-	<script type="text/javascript">
-		var vConsole = new VConsole();
-		console.log("hello word!");
-	</script>
-
 </head>
-
 <body>
-	<span id="wxLoginBtn"></span>
-	<script type="text/javascript">
-		var APPID = "wx3bd6e7ce6b64a4aa";
-		var REDIRECT_URI = "http://zx844174097.oicp.net/wxRedirect.html";
-		var SCOPE = "snsapi_login";
-		var STATE = "1111111111";//攻击防止
 
-		var obj = new WxLogin({
-			self_redirect: true,
-			id: "wxLoginBtn",
-			appid: APPID,
-			scope: SCOPE,
-			redirect_uri: REDIRECT_URI,
-			state: STATE,
-			style: "black"
-		});
-		
-	</script>
+<button id="btn">微信登录</button>
+<script type="text/javascript">
+			const handleLogin = () => {
+				// let local = window.location.href.split('#')[0];
+				let url =
+					'https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxd396e21301f850a4&redirect_uri=' +
+					encodeURIComponent('http://other.yingxiong.com/cd/hxs/web/wxRedirect.html') +
+					'&response_type=code&scope=snsapi_userinfo&state=1#wechat_redirect';
+				console.log('window.location.href', window.location.href);
+				let code = getUrlQuery().code;
+				if (!code) {
+					window.location.href = url;
+					 console.log("code", code);
+				} else {
+					code = getUrlQuery().code
+					console.log('code', code);
+				}
+			};
+			const getUrlQuery = (url) => {
+			  url = url == null ? window.location.href : url;
+			  const search = url.substring(url.lastIndexOf('?') + 1);
+			  const obj= {};
+			  const reg = /([^?&=]+)=([^?&=]*)/g;
+			  search.replace(reg, (rs, $1, $2) => {
+			    const name = decodeURIComponent($1);
+			    let val = decodeURIComponent($2);
+			    val = String(val);
+			    obj[name] = val;
+			    return rs;
+			  });
+			  return obj;
+			};
+			btn.addEventListener("click", handleLogin)
+		</script>
 </body>
-
 </html>

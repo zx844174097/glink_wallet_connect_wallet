@@ -34,27 +34,27 @@ import cn.net.mugui.web.tomcat.InsideTomcat2;
  */
 public class PcApp {
 	public static void main(String[] args) {
-		{
-
-			String payload = "{\"data\":\"2d95591c028d1dbb8716fa6351ecada61fa493e68d47025fd4bd13e44498eb5f95426e1fcd1625e20e574e7431f33873b2b79d2ef48ee5390d6c6f8323a392815e3214fa62e0c09a7ced49bd3a995675125a5cc93bcbf4f68f7b3206ab5f6441b2e96e0de7f7608bb369c9ac3c1acc5d5c92074bf691c6be37f26e4841604bfd69c003433d58bd194dd66a53460e8b5efc21af1539c21077b78582ea3457b9792ce3a1727e27f51da431198e671fc13f380bafb83842e2b393ab1fea2e6581fc022a4152b91ae3172769c0fa0f4db0756db03e50bf86209efc48dce4ec61056a5e05cf454329fe783e160678df2d1a96\",\"hmac\":\"4059018915d77bdc0a150991799f09c261dc6c2d84d0fffb5ccbecedccce4271\",\"iv\":\"41917fd68d02d641b7379bc690d83155\"}";
-			String key = "d1a0dfe3d95fa7b80d88f01d48e7b5ba60013d05a0067a66ee0dd1eff54f2494";
-			JSONObject parse = JSONObject.parseObject(payload);
-
-			byte[] keys = HexUtil.decodeHex(key);
-			// 签名校验
-			byte[] digest = DigestUtil.hmac(HmacAlgorithm.HmacSHA256, keys)
-					.digest(HexUtil.decodeHex(parse.getString("data") + parse.getString("iv")));
-			if (!HexUtil.encodeHexStr(digest).equals(parse.get("hmac"))) {
-				// 签名校验失败
-				return;
-			}
-
-			byte[] iv = HexUtil.decodeHex(parse.getString("iv"));
-
-			AES aes = new AES(Mode.CBC, Padding.PKCS5Padding, keys, iv);
-			byte[] decrypt = aes.decrypt(HexUtil.decodeHex(parse.getString("data")));
-			System.out.println(new String(decrypt));
-		}
+//		{
+//
+//			String payload = "{\"data\":\"2d95591c028d1dbb8716fa6351ecada61fa493e68d47025fd4bd13e44498eb5f95426e1fcd1625e20e574e7431f33873b2b79d2ef48ee5390d6c6f8323a392815e3214fa62e0c09a7ced49bd3a995675125a5cc93bcbf4f68f7b3206ab5f6441b2e96e0de7f7608bb369c9ac3c1acc5d5c92074bf691c6be37f26e4841604bfd69c003433d58bd194dd66a53460e8b5efc21af1539c21077b78582ea3457b9792ce3a1727e27f51da431198e671fc13f380bafb83842e2b393ab1fea2e6581fc022a4152b91ae3172769c0fa0f4db0756db03e50bf86209efc48dce4ec61056a5e05cf454329fe783e160678df2d1a96\",\"hmac\":\"4059018915d77bdc0a150991799f09c261dc6c2d84d0fffb5ccbecedccce4271\",\"iv\":\"41917fd68d02d641b7379bc690d83155\"}";
+//			String key = "d1a0dfe3d95fa7b80d88f01d48e7b5ba60013d05a0067a66ee0dd1eff54f2494";
+//			JSONObject parse = JSONObject.parseObject(payload);
+//
+//			byte[] keys = HexUtil.decodeHex(key);
+//			// 签名校验
+//			byte[] digest = DigestUtil.hmac(HmacAlgorithm.HmacSHA256, keys)
+//					.digest(HexUtil.decodeHex(parse.getString("data") + parse.getString("iv")));
+//			if (!HexUtil.encodeHexStr(digest).equals(parse.get("hmac"))) {
+//				// 签名校验失败
+//				return;
+//			}
+//
+//			byte[] iv = HexUtil.decodeHex(parse.getString("iv"));
+//
+//			AES aes = new AES(Mode.CBC, Padding.PKCS5Padding, keys, iv);
+//			byte[] decrypt = aes.decrypt(HexUtil.decodeHex(parse.getString("data")));
+//			System.out.println(new String(decrypt));
+//		}
 
 		LogInit();
 		DataSave.APP_PATH(PcApp.class);
@@ -67,7 +67,7 @@ public class PcApp {
 
 		SysConf conf = DataSave.context.getBean(SysConf.class);
 		conf.init();
-		conf.setValue("web_port", "5678");
+		conf.setValue("web_port", "5679");
 		String value = conf.getValue("web_port");
 		// 清空服务器
 		System.out.println(DataSave.APP_PATH);

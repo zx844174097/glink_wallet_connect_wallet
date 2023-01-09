@@ -28,7 +28,7 @@
 		function update() {
 
 			var request = new XMLHttpRequest();
-			request.open('get', "http://10.22.12.138:5678/SmsLogNew.html?line=" + index);
+			request.open('get', "./SmsLogNew.html?line=" + index);
 			request.onreadystatechange = () => {
 
 				if (request.readyState == 4) {
