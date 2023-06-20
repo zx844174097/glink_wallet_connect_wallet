@@ -52,7 +52,7 @@ import lombok.Setter;
 import lombok.experimental.Accessors;
 
 @SuppressWarnings("serial")
-//@Component
+@Component
 public class MetaMaskCsPanel extends FunctionUI {
 	private JPanel panel;
 	private DButton btnAndroid;

@@ -27,7 +27,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.stream.Collectors;
 
-//@Component
+@Component
 public class wx登录和支付2 extends FunctionUI {
 	public wx登录和支付2() {
 		setTitle("wx登录和支付2");

@@ -23,7 +23,7 @@ import cn.net.mugui.web.tomcat.InsideTomcat2.PathListener;
 import com.mugui.base.base.Component;
 import com.mugui.base.client.net.bagsend.HTTPUtil;
 
-//@Component
+@Component
 public class wx登录和支付 extends FunctionUI {
 	public wx登录和支付() {
 		setTitle("wx登录和支付");

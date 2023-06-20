@@ -1,0 +1,218 @@
+<html>
+<head>
+    <title>Service Control</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <!--引入jq包-->
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+</head>
+<body>
+    <!--写一行文本 "阿里服务 开启  关闭  状态",其中  开启 关闭 状态 可以被点击,触发js点击脚本-->
+    <h1>阿里服务</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-service','on')">开启</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('ali-service','off')">关闭</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('ali-service','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="ali-service"></textarea>
+
+    <!-- 同理 写一行文本 "华为服务 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>华为服务</h1>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('huawei-service','on')">开启</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('huawei-service','off')">关闭</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('huawei-service','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="huawei-service"></textarea>
+
+    <!--写一行文本 "阿里支付 开启  关闭  状态",其中  开启 关闭 状态 可以被点击,触发js点击脚本-->
+    <h1>阿里支付</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-pay-service','on')">开启</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('ali-pay-service','off')">关闭</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('ali-pay-service','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="ali-pay-service"></textarea>
+
+    <!-- 同理 写一行文本 "华为支付 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>华为支付</h1>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('huawei-pay-service','on')">开启</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('huawei-pay-service','off')">关闭</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('huawei-pay-service','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="huawei-pay-service"></textarea>
+
+
+    <!-- 同理 写一行文本 "阿里数据库 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>阿里数据库</h1>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('ali-database','on')">开启</a>
+    <a href="javascript:void(0)"  onclick="dualActivityServiceControl('ali-database','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-database','status')">状态</a>
+
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="ali-database"></textarea>
+
+    <!-- 同理 写一行文本 "华为数据库 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>华为数据库</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-database','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-database','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-database','status')">状态</a>
+
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="huawei-database"></textarea>
+
+    <!-- 同理 写一行文本 "阿里缓存 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>阿里缓存</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-cache','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-cache','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-cache','status')">状态</a>
+
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="ali-cache"></textarea>
+
+    <!-- 同理 写一行文本 "华为缓存 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>华为缓存</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-cache','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-cache','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-cache','status')">状态</a>
+
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="huawei-cache"></textarea>
+
+
+    <!-- 同理 写一行文本 "阿里网关 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>阿里网关</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-gateway','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-gateway','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-gateway','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="ali-gateway"></textarea>
+
+
+    <!-- 同理 写一行文本 "华为网关 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>华为网关</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-gateway','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-gateway','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-gateway','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="huawei-gateway"></textarea>
+
+
+
+
+    <!-- 同理 写一行文本 "阿里支付网关 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>阿里支付网关</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-pay-gateway','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-pay-gateway','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-pay-gateway','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="ali-pay-gateway"></textarea>
+
+
+    <!-- 同理 写一行文本 "华为支付网关 开启  关闭  状态",其中  开启 关闭 状态 可以被点击-->
+    <h1>华为支付网关</h1>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-pay-gateway','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-pay-gateway','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-pay-gateway','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="huawei-pay-gateway"></textarea>
+
+
+
+
+
+    <!-- 网关切换-->
+    <h1>网关切换</h1>
+    <!--切换到阿里网关-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('gateway','ali')">切换到阿里网关</a>
+    <!--切换到华为网关-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('gateway','huawei')">切换到华为网关</a>
+    <!--关闭网关切换-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('gateway','off')">关闭网关切换</a>
+    <!-- 网关切换状态-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('gateway','status')">网关切换状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="gateway"></textarea>
+
+
+    <!-- 支付网关切换-->
+    <h1>支付网关切换</h1>
+    <!--切换到阿里网关-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-gateway','ali')">切换到阿里支付网关</a>
+    <!--切换到华为网关-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-gateway','huawei')">切换到华为支付网关</a>
+    <!--关闭网关切换-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-gateway','off')">关闭网关切换</a>
+    <!-- 网关切换状态-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-gateway','status')">网关切换状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="pay-gateway"></textarea>
+
+
+    <!-- 服务网关-->
+    <h1>服务网关</h1>
+    <!-- 仅使用阿里服务-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('service','ali')">仅使用阿里服务</a>
+    <!-- 仅使用华为服务-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('service','huawei')">仅使用华为服务</a>
+    <!-- 2边可同时使用-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('service','both')">2边可同时使用</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('service','status')">服务网关状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="service"></textarea>
+
+    <!-- 服务网关-->
+    <h1>支付服务网关</h1>
+    <!-- 仅使用阿里支付服务-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-service','ali')">仅使用阿里支付服务</a>
+    <!-- 仅使用华为支付服务-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-service','huawei')">仅使用华为支付服务</a>
+    <!-- 2边可同时使用-->
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-service','both')">2边可同时使用</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('pay-service','status')">服务网关状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="pay-service"></textarea>
+
+
+
+
+
+
+
+
+    <!-- 同步服务-->
+    <h1>同步服务</h1>
+    <!--阿里canal服务-->
+    <h2>阿里canal服务</h2>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-canal','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-canal','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('ali-canal','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="ali-canal"></textarea>
+
+    <h2>华为canal服务</h2>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-canal','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-canal','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('huawei-canal','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="huawei-canal"></textarea>
+    <h2>双向同步处理服务</h2>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('dual-activity','on')">开启</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('dual-activity','off')">关闭</a>
+    <a href="javascript:void(0)" onclick="dualActivityServiceControl('dual-activity','status')">状态</a>
+    <!--显示操作返回信息-->
+    <textarea rows="10" cols="100" readonly="readonly" id="dual-activity"></textarea>
+</body>
+
+<script>
+    function dualActivityServiceControl(type,service){
+        var url = "dualActivityServiceApi?service="+service+"&type="+type;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET",url,true);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState == 4 && xhr.status == 200){
+                var text = xhr.responseText;
+                document.getElementById(type).value = text;
+            }
+        }
+        xhr.send();
+    }
+
+</script>
+</html>

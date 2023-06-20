@@ -32,7 +32,7 @@ import cn.net.mugui.net.pc.util.SysConf;
 import cn.net.mugui.web.tomcat.InsideTomcat2;
 import cn.net.mugui.web.tomcat.InsideTomcat2.PathListener;
 
-//@Component
+@Component
 public class qq登录和支付 extends FunctionUI {
 	public qq登录和支付() {
 		setTitle("qq登录和支付");
